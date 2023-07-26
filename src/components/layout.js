@@ -2,14 +2,45 @@
  * Layout component that queries for data
  * with Gatsby's useStaticQuery component
  *
- * See: https://www.gatsbyjs.com/docs/how-to/querying-data/use-static-query/
+ * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import * as React from "react"
+import React from "react"
+import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
+import { library } from "@fortawesome/fontawesome-svg-core"
+import { faInstagram, faFacebook } from "@fortawesome/free-brands-svg-icons"
+import {
+  faHome,
+  faCoffee,
+  faHotel,
+  faArrowRight,
+  faArrowLeft,
+  faTimesCircle,
+  faSchool,
+  faCar,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons"
 
 import Header from "./header"
+import Footer from "./footer"
+
 import "./layout.css"
+import "./mediaQ.css"
+
+library.add(
+  faFacebook,
+  faHome,
+  faCoffee,
+  faHotel,
+  faInstagram,
+  faArrowLeft,
+  faArrowRight,
+  faTimesCircle,
+  faSchool,
+  faCar,
+  faUser
+)
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -22,30 +53,22 @@ const Layout = ({ children }) => {
     }
   `)
 
+  if (typeof window !== "undefined") {
+    // eslint-disable-next-line global-require
+    require("smooth-scroll")('a[href*="#"]')
+  }
+
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: `var(--size-content)`,
-          padding: `var(--size-gutter)`,
-        }}
-      >
-        <main>{children}</main>
-        <footer
-          style={{
-            marginTop: `var(--space-5)`,
-            fontSize: `var(--font-sm)`,
-          }}
-        >
-          © {new Date().getFullYear()} &middot; Built with
-          {` `}
-          <a href="https://www.gatsbyjs.com">Gatsby</a>
-        </footer>
-      </div>
+      <Header siteTitle={data.site.siteMetadata.title} />
+      <main> {children}</main>
+      <Footer></Footer>
     </>
   )
+}
+
+Layout.propTypes = {
+  children: PropTypes.node.isRequired,
 }
 
 export default Layout
